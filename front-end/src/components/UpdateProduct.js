@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const UpdateProduct = () => {
 
@@ -8,16 +8,20 @@ const UpdateProduct = () => {
     const [category, setCategory] = useState("");
     const [company, setCompany] = useState("");
     const params = useParams();
+    const navigate = useNavigate();
 
-    useEffect(()=>{
+    useEffect(() => {
         getProduct();
-    },[])
+    }, [])
 
     const getProduct = async () => {
         try {
-            let result = await fetch(`http://localhost:5000/product/${params.id}`);
+            let result = await fetch(`http://localhost:5000/product/${params.id}`, {
+                headers:
+                    { authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}` }
+            });
 
-            result=await result.json();
+            result = await result.json();
 
             setName(result.name);
             setPrice(result.price);
@@ -28,6 +32,21 @@ const UpdateProduct = () => {
             console.log(error);
         }
 
+    }
+
+    const updateProduct = async () => {
+        let result = await fetch(`http://localhost:5000/product/${params.id}`,
+            {
+                method: "Put",
+                body: JSON.stringify({ name, price, category, company }),
+                headers: {
+                    "Content-Type": "application/json",
+                    authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`
+                }
+            }
+        );
+        result = await result.json();
+        navigate("/")
     }
 
     return (
@@ -47,7 +66,7 @@ const UpdateProduct = () => {
             <input type="text" placeholder='Enter Product Company' className='inputBox' value={company}
                 onChange={(e) => setCompany(e.target.value)} />
 
-            <button type='button' className='appButton' >Update Product</button>
+            <button type='button' className='appButton' onClick={updateProduct} >Update Product</button>
 
         </div>
     )

@@ -19,7 +19,7 @@ const SignUp = () => {
 
         try {
 
-            const result = await fetch('http://localhost:5000/register', {
+            let result = await fetch('http://localhost:5000/register', {
                 method: 'post',
                 body: JSON.stringify({ name, email, password }),
                 headers: {
@@ -27,15 +27,14 @@ const SignUp = () => {
                 }
             })
 
-            const jsonData = await result.json();
+             result = await result.json();
 
-            if (jsonData) {
+            if (result) {
                 navigate("/")
             }
 
-            localStorage.setItem("user", JSON.stringify(jsonData));
-
-            console.log(jsonData);
+            localStorage.setItem("user", JSON.stringify(result.result));
+            localStorage.setItem("token",JSON.stringify(result.auth));
 
         } catch (error) {
             console.log(error);
