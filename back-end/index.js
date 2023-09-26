@@ -69,10 +69,10 @@ app.post("/add-product", verifyToken, async (req, res) => {
 });
 
 
-app.get("/products", verifyToken, async (req, res) => {
+app.get("/products/:userid", verifyToken, async (req, res) => {
 
     try {
-        const products = await Product.find();
+        const products = await Product.find({ userid: req.params.userid });
 
         if (products.length > 0) {
             res.send(products);

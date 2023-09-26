@@ -11,8 +11,12 @@ const ProductList = () => {
 
     const getProducts = async () => {
 
+        let user = JSON.parse(localStorage.getItem("user"));
+        console.log(user);
+        let userid=user._id;
+        console.log(userid);
         try {
-            let result = await fetch("http://localhost:5000/products", {
+            let result = await fetch(`http://localhost:5000/products/${userid}`, {
                 headers:
                     { authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}` }
             });
