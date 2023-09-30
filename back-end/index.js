@@ -1,10 +1,13 @@
 const express = require("express");
 const app = express();
-require("./db/config");
-const User = require("./db/User");
+
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+
+require("./db/config");
+const User = require("./db/User");
 const Product = require("./db/Product");
+
 const port = process.env.PORT || 5000;
 
 const jwtkey = "e-comm";
